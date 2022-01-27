@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_thmdb_app/src/api/api.dart';
 
 class DioInterceptors extends InterceptorsWrapper {
   @override
   onError(DioError error, handler) async {
     //enviar para sentry etc.
-
-    //pode ser usado para motrar para o usuario ou tratar as menssagens,
     print("error : $error");
     print("error : ${error.message}");
     print("response : ${error.response}");

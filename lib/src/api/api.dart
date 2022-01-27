@@ -4,6 +4,10 @@ import 'package:flutter_thmdb_app/src/api/url.dart';
 
 //configurações referente a api.
 const String apiKey = 'e3db5bb0c72d2420dc98511d974049de';
+const String language = 'pt-BR'; //ISO 639-1
+const bool includeAdult = false;
+const int connectTimeout = 15; //informar em segundos
+const int receiveTimeout = 15; //informar em segundos
 
 class Api {
   static CustomDio instanceDio;
