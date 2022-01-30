@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_thmdb_app/src/shared/consts.dart';
 import 'package:flutter_thmdb_app/src/shared/utils/typography/typography.dart';
@@ -24,22 +23,29 @@ class MBackButton extends StatelessWidget {
         builder: (context, child) {
           return FractionalTranslation(
             translation: buttonTranslation.value,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.arrow_back_ios,
-                  color: gray02,
-                  size: 14,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                FractionalTranslation(
-                    translation: textTranslation.value,
-                    child: CustomTypography.title14('Voltar',
-                        color: gray02, fontWeight: FontWeight.w500)),
-              ],
+            child: Container(
+               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.arrow_back_ios,
+                    color: gray02,
+                    size: 14,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  FractionalTranslation(
+                      translation: textTranslation.value,
+                      child: CustomTypography.title14('Voltar',
+                          color: gray02, fontWeight: FontWeight.w500)),
+                ],
+              ),
             ),
           );
         },
