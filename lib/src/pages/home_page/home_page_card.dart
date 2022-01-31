@@ -4,7 +4,7 @@ import 'package:flutter_thmdb_app/src/api/url.dart';
 import 'package:flutter_thmdb_app/src/models/movie_list_model.dart';
 import 'package:flutter_thmdb_app/src/pages/home_page/home_page_helper.dart';
 import 'package:flutter_thmdb_app/src/shared/utils/typography/typography.dart';
-import 'package:flutter_thmdb_app/src/storage/image_cache/custom_cache_manager.dart';
+import 'package:flutter_thmdb_app/src/storage/cache/custom_cache_manager_image/custom_cache_manager_image.dart';
 
 class MovieCard extends StatelessWidget {
   ResultMovie _data;

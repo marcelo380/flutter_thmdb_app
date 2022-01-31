@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_thmdb_app/src/api/url.dart';
 import 'package:flutter_thmdb_app/src/controllers/movie_list_mobx/movie_list_mobx.dart';
 import 'package:flutter_thmdb_app/src/pages/home_page/home_page_card.dart';
 import 'package:flutter_thmdb_app/src/pages/home_page/home_page_helper.dart';
@@ -42,13 +40,7 @@ class _HomePageState extends State<HomePage> {
 
   _loadPage() async {
     moviesMobxCTRL = MoviesMobxCTRL();
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
-      moviesMobxCTRL.fetchMovieList(context);
-    } else {
-      offline = true;
-    }
+    await moviesMobxCTRL.fetchMovieList(context);
   }
 
   _body() => Observer(builder: (_) {
@@ -62,8 +54,6 @@ class _HomePageState extends State<HomePage> {
                       controller: _scrollCTRL,
                       itemCount: moviesMobxCTRL.movieList.length,
                       itemBuilder: (context, index) {
-                        print(Url.getImageUrl(
-                            moviesMobxCTRL.movieList[index].posterPath));
                         return GestureDetector(
                           onTap: () => navigatorToDetailsMovie(
                             context,
@@ -137,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => _loadPage(),
+                        onTap: () {},
                         child: Chip(
                           label: Text("Ação"),
                           backgroundColor: darkBlue,
@@ -160,7 +150,7 @@ class _HomePageState extends State<HomePage> {
   _scrollListener() {
     if (_scrollCTRL.offset >= _scrollCTRL.position.maxScrollExtent &&
         !_scrollCTRL.position.outOfRange) {
-      // troca pagina
+      moviesMobxCTRL.nextPage(context);
     }
   }
 
