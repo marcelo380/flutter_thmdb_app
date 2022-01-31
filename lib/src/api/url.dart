@@ -7,4 +7,5 @@ class Url {
   static const String popularMovies = movie + '/popular';
   static String search(String query) => "/search" + movie;
   static const String genre = '/genre/movie/list';
+  static String getCreditsUrl(int movieID) => movie + "/$movieID/credits";
 }

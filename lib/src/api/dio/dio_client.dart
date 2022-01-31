@@ -9,7 +9,6 @@ class CustomDio {
   final int connectTimeout;
   final int receiveTimeout;
 
-  /// v1 v2 v3...
   CustomDio({
     @required this.con,
     @required this.baseUrl,
