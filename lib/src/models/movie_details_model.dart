@@ -33,7 +33,7 @@ class MovieDetailsModel {
   bool adult;
   String backdropPath;
   BelongsToCollection belongsToCollection;
-  int budget;
+  dynamic budget;
   List<Genre> genres;
   String homepage;
   int id;
