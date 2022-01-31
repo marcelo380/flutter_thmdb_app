@@ -1,6 +1,7 @@
 import 'package:flutter_thmdb_app/src/api/api.dart';
 import 'package:flutter_thmdb_app/src/models/genre_model.dart';
-
+import 'package:flutter_thmdb_app/src/shared/consts.dart';
+import 'package:flutter_thmdb_app/src/shared/utils/connectivity/connectivity.dart';
 
 class GenreSingleton {
   static GenreSingleton _instance;
@@ -21,11 +22,23 @@ class GenreSingleton {
   Future init() async {
     GenreSingleton().clear();
 
-    await Api.fetchGenre().then((value) async {
-      GenreModel genreModel = GenreModel.fromMap(value.data);
+    if (await CheckConnectivity.hasConection()) {
+      await Api.fetchGenre().then((value) async {
+        genreModel = GenreModel.fromMap(value.data);
+
+        GenreSingleton(gModel: genreModel);
+      });
+    } else {
+      //para atualizar via request basta utilizar a forma que foi feito o cache de listagem de filmes
+      //foi declaro como constantes so para demonstrar
+      List<Genre> genres = [];
+      generosOfline.forEach((element) {
+        genres.add(Genre.fromMap(element));
+      });
+      genreModel = GenreModel(genres: genres);
 
       GenreSingleton(gModel: genreModel);
-    });
+    }
   }
 
   clear() {
