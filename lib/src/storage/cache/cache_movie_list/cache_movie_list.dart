@@ -35,7 +35,7 @@ class CacheMovieList {
         if (!_existMovie) {
           listSP.add(movieList[i].toJson());
         } else {
-          print("o filme ${movieList[i].title} ja foi cadastrado");
+          //print("o filme ${movieList[i].title} ja foi cadastrado");
         }
       }
       objects.addAll(listSP);
