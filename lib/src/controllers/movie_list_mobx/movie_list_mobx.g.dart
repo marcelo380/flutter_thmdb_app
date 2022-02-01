@@ -23,6 +23,13 @@ mixin _$MoviesMobxCTRL on _MoviesMobxCTRLBase, Store {
       (_$firstLoadingComputed = Computed<bool>(() => super.firstLoading,
               name: '_MoviesMobxCTRLBase.firstLoading'))
           .value;
+  Computed<bool> _$notFoundSearchComputed;
+
+  @override
+  bool get notFoundSearch =>
+      (_$notFoundSearchComputed = Computed<bool>(() => super.notFoundSearch,
+              name: '_MoviesMobxCTRLBase.notFoundSearch'))
+          .value;
 
   final _$movieListAtom = Atom(name: '_MoviesMobxCTRLBase.movieList');
 
@@ -54,14 +61,21 @@ mixin _$MoviesMobxCTRL on _MoviesMobxCTRLBase, Store {
     });
   }
 
+  final _$nextPageAsyncAction = AsyncAction('_MoviesMobxCTRLBase.nextPage');
+
+  @override
+  Future nextPage(BuildContext context) {
+    return _$nextPageAsyncAction.run(() => super.nextPage(context));
+  }
+
   final _$fetchMovieListAsyncAction =
       AsyncAction('_MoviesMobxCTRLBase.fetchMovieList');
 
   @override
   Future<dynamic> fetchMovieList(dynamic context,
-      {int forcePage, String query}) {
-    return _$fetchMovieListAsyncAction.run(() =>
-        super.fetchMovieList(context, forcePage: forcePage, query: query));
+      {int forcePage, String queryText, int genre}) {
+    return _$fetchMovieListAsyncAction.run(() => super.fetchMovieList(context,
+        forcePage: forcePage, queryText: queryText, genre: genre));
   }
 
   final _$_MoviesMobxCTRLBaseActionController =
@@ -79,23 +93,13 @@ mixin _$MoviesMobxCTRL on _MoviesMobxCTRLBase, Store {
   }
 
   @override
-  void nextPage(BuildContext context) {
-    final _$actionInfo = _$_MoviesMobxCTRLBaseActionController.startAction(
-        name: '_MoviesMobxCTRLBase.nextPage');
-    try {
-      return super.nextPage(context);
-    } finally {
-      _$_MoviesMobxCTRLBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 movieList: ${movieList},
 paging: ${paging},
 normalLoaded: ${normalLoaded},
-firstLoading: ${firstLoading}
+firstLoading: ${firstLoading},
+notFoundSearch: ${notFoundSearch}
     ''';
   }
 }
