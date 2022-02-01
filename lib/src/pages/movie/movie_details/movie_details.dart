@@ -6,6 +6,7 @@ import 'package:flutter_thmdb_app/src/components/back_button/back_button.dart';
 import 'package:flutter_thmdb_app/src/components/widget_box/widget_box.dart';
 import 'package:flutter_thmdb_app/src/models/credits_model.dart';
 import 'package:flutter_thmdb_app/src/models/movie_details_model.dart';
+import 'package:flutter_thmdb_app/src/pages/movie/movie_helper.dart';
 import 'package:flutter_thmdb_app/src/shared/consts.dart';
 import 'package:flutter_thmdb_app/src/shared/utils/connectivity/connectivity.dart';
 import 'package:flutter_thmdb_app/src/shared/utils/typography/typography.dart';
@@ -24,7 +25,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   Animation<double> controller;
   Animation<Offset> buttonAnimationTrans;
   Animation<Offset> textAnimationTrans;
-  MovieDetailsModel movieViewModel;
+  MovieDetailsModel movieDetailsModel;
   bool hasConection = false;
 
   final mask = NumberFormat("#,##0.00", "pt_BR");
@@ -70,7 +71,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       var resMovieInfo = await Api.fetchMovieInfo(widget.movieID);
       var resCreditsInfo = await Api.fetchCredits(widget.movieID);
 
-      movieViewModel = MovieDetailsModel.fromMap(resMovieInfo.data);
+      movieDetailsModel = MovieDetailsModel.fromMap(resMovieInfo.data);
       creditsModel = CreditsModel.fromMap(resCreditsInfo.data);
 
       if (mounted) setState(() {});
@@ -136,7 +137,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    movieViewModel != null
+                    movieDetailsModel != null
                         ? Column(
                             children: [
                               const SizedBox(
@@ -151,7 +152,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                     // crossAxisAlignment: CrossAxisAlignment.baseline,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      CustomTypography.title24(movieViewModel
+                                      CustomTypography.title24(movieDetailsModel
                                           .voteAverage
                                           .toString()),
                                       CustomTypography.body14(' /10',
@@ -161,7 +162,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                   const SizedBox(
                                     height: 32,
                                   ),
-                                  CustomTypography.title14(movieViewModel.title,
+                                  CustomTypography.title14(
+                                      movieDetailsModel.title,
                                       color: gray01),
                                   const SizedBox(
                                     height: 12,
@@ -173,7 +175,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                           "TÍTULO ORIGINAL: ",
                                           color: gray02),
                                       CustomTypography.body10(
-                                          movieViewModel.originalTitle,
+                                          movieDetailsModel.originalTitle,
                                           color: gray02,
                                           fontWeight: FontWeight.w600),
                                     ],
@@ -193,7 +195,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                               color: gray03),
                                           Flexible(
                                             child: CustomTypography.title14(
-                                                movieViewModel.releaseDate.year
+                                                movieDetailsModel
+                                                    .releaseDate.year
                                                     .toString(),
                                                 color: gray01),
                                           ),
@@ -206,7 +209,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                               color: gray03),
                                           Flexible(
                                             child: CustomTypography.title14(
-                                                _calculeDuration(),
+                                                calculeDurationMovie(
+                                                    movieDetailsModel),
                                                 color: gray01),
                                           ),
                                         ],
@@ -222,12 +226,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                     alignment: WrapAlignment.spaceEvenly,
                                     runAlignment: WrapAlignment.spaceEvenly,
                                     children: List.generate(
-                                      movieViewModel.genres.length,
+                                      movieDetailsModel.genres.length,
                                       (index) => BoxWidget(
                                         type: 1,
                                         widget: [
                                           CustomTypography.title14(
-                                              movieViewModel.genres[index].name,
+                                              movieDetailsModel
+                                                  .genres[index].name,
                                               color: gray03),
                                         ],
                                       ),
@@ -238,7 +243,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                   ),
                                   _buildTitleAndText(
                                     title: 'Descrição',
-                                    text: movieViewModel.overview,
+                                    text: movieDetailsModel.overview,
                                   ),
                                   const SizedBox(
                                     height: 40,
@@ -254,7 +259,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                           child: CustomTypography.title14(
                                               "\$ " +
                                                   mask.format(
-                                                      movieViewModel.budget),
+                                                      movieDetailsModel.budget),
                                               color: gray01),
                                         ),
                                       ],
@@ -273,7 +278,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                             color: gray03),
                                         Flexible(
                                           child: CustomTypography.title14(
-                                              fetchProdutionCompanies(),
+                                              fetchProdutionCompanies(
+                                                  movieDetailsModel),
                                               color: gray01),
                                         ),
                                       ],
@@ -312,38 +318,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         ),
       ),
     );
-  }
-
-  _calculeDuration() {
-    Duration _duration = Duration(minutes: movieViewModel.runtime);
-    int min = movieViewModel.runtime - (_duration.inHours * 60);
-    return '${_duration.inHours}h $min min';
-  }
-
-  fetchProdutionCompanies() {
-    String productionCompaniesName = "";
-    movieViewModel.productionCompanies.forEach((e) {
-      productionCompaniesName += e.name;
-    });
-    return productionCompaniesName;
-  }
-
-  String fetchCast(List cast) {
-    String result = "";
-    cast.forEach((e) {
-      result += e.name + ", ";
-    });
-
-    return result;
-  }
-
-  String fetchDirector(CreditsModel creditsModel) {
-    String res = creditsModel.crew
-        .firstWhere((element) => element.job == "Director")
-        .name;
-    List nameSplit = res.split(" ");
-
-    return nameSplit[0] + " " + nameSplit[1];
   }
 
   _buildTitleAndText({@required String title, @required String text}) =>

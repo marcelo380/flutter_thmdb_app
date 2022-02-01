@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_thmdb_app/src/models/credits_model.dart';
 import 'package:flutter_thmdb_app/src/models/genre_model.dart';
-import 'package:flutter_thmdb_app/src/pages/movie_details/movie_details.dart';
+import 'package:flutter_thmdb_app/src/pages/movie/movie_details/movie_details.dart';
+
 import 'package:flutter_thmdb_app/src/shared/singleton/genre_singleton.dart';
 
 navigatorToDetailsMovie(
@@ -50,3 +52,34 @@ List<Genre> categoryOptions = [
   Genre(id: 14, name: 'Fantasia'),
   Genre(id: 35, name: 'Comédia'),
 ];
+
+String calculeDurationMovie(movieViewModel) {
+  Duration _duration = Duration(minutes: movieViewModel.runtime);
+  int min = movieViewModel.runtime - (_duration.inHours * 60);
+  return '${_duration.inHours}h $min min';
+}
+
+String fetchDirector(CreditsModel creditsModel) {
+  String res =
+      creditsModel.crew.firstWhere((element) => element.job == "Director").name;
+  List nameSplit = res.split(" ");
+
+  return nameSplit[0] + " " + nameSplit[1];
+}
+
+String fetchCast(List cast) {
+  String result = "";
+  cast.forEach((e) {
+    result += e.name + ", ";
+  });
+
+  return result;
+}
+
+fetchProdutionCompanies(movieDetailsModel) {
+  String productionCompaniesName = "";
+  movieDetailsModel.productionCompanies.forEach((e) {
+    productionCompaniesName += e.name;
+  });
+  return productionCompaniesName;
+}

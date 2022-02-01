@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_thmdb_app/src/api/url.dart';
 import 'package:flutter_thmdb_app/src/models/movie_list_model.dart';
-import 'package:flutter_thmdb_app/src/pages/home_page/home_page_helper.dart';
+import 'package:flutter_thmdb_app/src/pages/movie/movie_helper.dart';
 import 'package:flutter_thmdb_app/src/shared/utils/typography/typography.dart';
 import 'package:flutter_thmdb_app/src/storage/cache/custom_cache_manager_image/custom_cache_manager_image.dart';
 
-class MovieCard extends StatelessWidget {
+class MovieListCard extends StatelessWidget {
   ResultMovie _data;
-  MovieCard(this._data);
+  MovieListCard(this._data);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
