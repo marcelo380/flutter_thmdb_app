@@ -36,7 +36,9 @@ class _MovieListPageState extends State<MovieListPage> {
     _verifyConnection();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _body(),
+      body: SafeArea(
+        child: _body(),
+      ),
     );
   }
 
@@ -191,7 +193,13 @@ class _MovieListPageState extends State<MovieListPage> {
           },
         );
       } else {
-        return const CircularProgressIndicator();
+        return Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CircularProgressIndicator()],
+          ),
+        );
       }
     });
   }
