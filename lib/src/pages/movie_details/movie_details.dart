@@ -7,8 +7,10 @@ import 'package:flutter_thmdb_app/src/components/widget_box/widget_box.dart';
 import 'package:flutter_thmdb_app/src/models/credits_model.dart';
 import 'package:flutter_thmdb_app/src/models/movie_details_model.dart';
 import 'package:flutter_thmdb_app/src/shared/consts.dart';
+import 'package:flutter_thmdb_app/src/shared/utils/connectivity/connectivity.dart';
 import 'package:flutter_thmdb_app/src/shared/utils/typography/typography.dart';
-import 'package:flutter_thmdb_app/src/storage/image_cache/custom_cache_manager.dart';
+import 'package:flutter_thmdb_app/src/storage/cache/custom_cache_manager_image/custom_cache_manager_image.dart';
+import 'package:intl/intl.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   MovieDetailsPage(this.movieID, this.imageUrl);
@@ -23,10 +25,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   Animation<Offset> buttonAnimationTrans;
   Animation<Offset> textAnimationTrans;
   MovieDetailsModel movieViewModel;
+  bool hasConection = false;
+
+  final mask = NumberFormat("#,##0.00", "pt_BR");
+
   CreditsModel creditsModel;
   @override
   void initState() {
     _loadMovieInfo();
+    _verifyConnection();
     super.initState();
   }
 
@@ -59,17 +66,21 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   Future _loadMovieInfo() async {
-    var resMovieInfo = await Api.fetchMovieInfo(widget.movieID);
-    var resCreditsInfo = await Api.fetchCredits(widget.movieID);
+    if (hasConection) {
+      var resMovieInfo = await Api.fetchMovieInfo(widget.movieID);
+      var resCreditsInfo = await Api.fetchCredits(widget.movieID);
 
-    movieViewModel = MovieDetailsModel.fromMap(resMovieInfo.data);
-    creditsModel = CreditsModel.fromMap(resCreditsInfo.data);
+      movieViewModel = MovieDetailsModel.fromMap(resMovieInfo.data);
+      creditsModel = CreditsModel.fromMap(resCreditsInfo.data);
 
-    setState(() {});
+      if (mounted) setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _verifyConnection();
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -116,6 +127,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             )),
                       ),
                     ),
+                    if (!hasConection)
+                      Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: CustomTypography.title14(
+                          "Você precisa de conexão com a internet para ver detalhes do filme.",
+                          color: darkBlue,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     movieViewModel != null
                         ? Column(
                             children: [
@@ -228,11 +248,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                     child: BoxWidget(
                                       type: 0,
                                       widget: [
-                                        CustomTypography.title14('ORÇAMENTO: ',
+                                        CustomTypography.title14('ORÇAMENTO:  ',
                                             color: gray03),
                                         Flexible(
                                           child: CustomTypography.title14(
-                                              movieViewModel.budget.toString(),
+                                              "\$ " +
+                                                  mask.format(
+                                                      movieViewModel.budget),
                                               color: gray01),
                                         ),
                                       ],
@@ -278,7 +300,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               ),
                             ],
                           )
-                        : CircularProgressIndicator()
+                        : const Padding(
+                            padding: EdgeInsets.only(top: 25.0),
+                            child: CircularProgressIndicator(),
+                          )
                   ],
                 ),
               ),
@@ -335,4 +360,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           ],
         ),
       );
+
+  Future<bool> _verifyConnection() async {
+    hasConection = await CheckConnectivity.hasConection();
+    if (hasConection) {
+      _loadMovieInfo();
+    }
+    if (mounted) setState(() {});
+    return hasConection;
+  }
 }
