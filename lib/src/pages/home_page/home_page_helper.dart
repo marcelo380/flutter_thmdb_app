@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_thmdb_app/src/models/genre_model.dart';
 import 'package:flutter_thmdb_app/src/pages/movie_details/movie_details.dart';
 import 'package:flutter_thmdb_app/src/shared/singleton/genre_singleton.dart';
 
@@ -24,7 +25,6 @@ navigatorToDetailsMovie(
           }),
     );
 
-
 String fetchGenreName(List genreIDs) {
   GenreSingleton genreSingleton = GenreSingleton();
   String genre = "";
@@ -43,3 +43,10 @@ String fetchGenreName(List genreIDs) {
 
   return genre;
 }
+
+List<Genre> categoryOptions = [
+  Genre(id: 28, name: 'Ação'),
+  Genre(id: 12, name: 'Aventura'),
+  Genre(id: 14, name: 'Fantasia'),
+  Genre(id: 35, name: 'Comédia'),
+];
