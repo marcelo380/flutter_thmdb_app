@@ -21,24 +21,29 @@ class Api {
     return instanceDio;
   }
 
-  static Future fetchMovieList({String query, int page, int genres}) async {
-    Response res;
-    if (query == null || query.isEmpty) {
-      res = await DioClient().con.get(Url.popularMovies);
-    } else {
-      res = await DioClient()
-          .con
-          .get(Url.search(query), queryParameters: {'query': query, 'with_genres': null});
-    }
-
-    return res;
-  }
-
   static Future fetchMovieInfo(int movieID) async =>
       await DioClient().con.get(Url.movie + "/$movieID");
 
   static Future fetchGenre() async => await DioClient().con.get(Url.genre);
+  
   static Future fetchCredits(int movieID) async =>
       await DioClient().con.get(Url.getCreditsUrl(movieID));
-}
 
+  static Future fetchMovieList({String query, int page, int genre}) async {
+    Response res;
+    if ((query == null || query.isEmpty) && genre == null) {
+      res = await DioClient()
+          .con
+          .get(Url.popularMovies, queryParameters: {'page': page});
+    } else if (genre != null) {
+      res = await DioClient()
+          .con
+          .get(Url.discoverMovie, queryParameters: {'with_genres': genre});
+    } else {
+      res = await DioClient().con.get(Url.search(query),
+          queryParameters: {'query': query, 'page': page});
+    }
+
+    return res;
+  }
+}
