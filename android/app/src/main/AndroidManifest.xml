@@ -1,8 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.sbsistemas.flutter_thmdb_app">
+    package="br.com.marcelo.flutter_thmdb_app">
          <uses-permission android:name="android.permission.INTERNET" />
- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
    <application
         android:label="flutter_thmdb_app"
         android:name="${applicationName}"
