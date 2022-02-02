@@ -3,7 +3,6 @@ import 'package:flutter_thmdb_app/src/api/dio/dio_client.dart';
 import 'package:flutter_thmdb_app/src/api/url.dart';
 
 //configurações referente a api.
-const String apiKey = 'e3db5bb0c72d2420dc98511d974049de';
 const String language = 'pt-BR'; //ISO 639-1
 const bool includeAdult = false;
 const int connectTimeout = 15; //informar em segundos
@@ -25,7 +24,7 @@ class Api {
       await DioClient().con.get(Url.movie + "/$movieID");
 
   static Future fetchGenre() async => await DioClient().con.get(Url.genre);
-  
+
   static Future fetchCredits(int movieID) async =>
       await DioClient().con.get(Url.getCreditsUrl(movieID));
 
