@@ -1,16 +1,23 @@
-# flutter_thmdb_app
+# flutter_thmdb_app :movie_camera:
 
-A new Flutter project.
+## Para começar
+Projeto demonstração utilizando api [themoviedb TMDB](https://www.themoviedb.org/?language=pt-BR)
+:warning: Atenção você precisa configurar um token de api, para isso registre no site themoviedb e gerar um token para uso.
 
-## Getting Started
+Basta renomear o arquivo .env.example e colcoar e definir um token_api=
 
-This project is a starting point for a Flutter application.
+## Informações sobre uso da api
+https://developers.themoviedb.org/3/getting-started/introduction
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## O que você encontra por aqui
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [x] Animações
+- [x] Injeção de depencias
+- [x] Cache para uso offline 
+- [x] Cache de imagens para evitar uso de dados. 
+- [x] Uso de dio e interceptors
+- [x] Gerencia de estado MOBX
+- [x] Singleton Design Pattern
+
+
